@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pollution Mitigation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="navbar">
+            <img src="ecosimulatelogo.png" class="logo" alt="EcoSimulate Logo">
+            <ul>
+                <li class="regular-menu"><a href="home.html">Home</a></li>
+                <li class="regular-menu"><a href="getinsights.html">Get Insights</a></li>
+                <li class="regular-menu"><a href="simulator.html">Simulator</a></li>
+                <li class="regular-menu"><a href="knowmore.html">Know More</a></li>
+                <li class="researcher-menu" style="display: none;">
+                    <a href="research-dashboard.html">Research Dashboard</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">You</a>
+                    <div class="dropdown-content">
+                        <div class="user-info">
+                            <p>Email: dp1801@srmist.edu.in</p>
+                            <p>Name: Dharmesh Priyadarshi</p>
+                            <p id="researchId-display"></p>
+                        </div>
+                        <a href="index.html" class="logout-btn">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="simulator-content">
+        
+        <div class="simulator-container">
+            <!-- Graph Section -->
+            <div class="graph-section">
+                <canvas id="pollutionGraph"></canvas>
+            </div>
+
+            <!-- Controls Section -->
+            <div class="controls-section">
+                <!-- Area Selector -->
+                <div class="slider-container">
+                    <label for="area-select">Select Area (m²)</label>
+                    <div class="slider-wrapper">
+                        <select id="area-select" class="area-select">
+                            <option value="10000">10,000 m²</option>
+                            <option value="23000">23,000 m²</option>
+                            <option value="50000">50,000 m²</option>
+                            <option value="75000">75,000 m²</option>
+                            <option value="100000">100,000 m²</option>
+                        </select>
+                        <span class="slider-value">10,000 m²</span>
+                    </div>
+                </div>
+
+                <!-- Temperature Slider -->
+                <div class="slider-container">
+                    <label for="temperature">Temperature (°C)</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="temperature" min="0" max="50" value="25" class="slider">
+                        <span class="slider-value">25°C</span>
+                    </div>
+                </div>
+
+                <!-- Particulate Matter Slider -->
+                <div class="slider-container">
+                    <label for="particulateMatter">Particulate Matter (PM2.5 µg/m³)</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="particulateMatter" min="0" max="500" value="50" class="slider">
+                        <span class="slider-value">50 µg/m³</span>
+                    </div>
+                </div>
+
+                <!-- Carbon Monoxide Slider -->
+                <div class="slider-container">
+                    <label for="carbonMonoxide">Carbon Monoxide (ppm)</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="carbonMonoxide" min="0" max="50" value="5" class="slider">
+                        <span class="slider-value">5 ppm</span>
+                    </div>
+                </div>
+
+                <!-- Artificial Trees Slider -->
+                <div class="slider-container">
+                    <label for="artificial-trees">Artificial Trees</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="artificial-trees" min="0" max="125" value="0" class="slider">
+                        <span class="slider-value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-section">
+                <h2>Pollution Map</h2>
+                <div class="map-container">
+                    <div id="delhi-map" class="delhi-map"></div>
+                    <div id="grid-overlay" class="grid-overlay"></div>
+                    <div id="pollution-overlay" class="pollution-overlay"></div>
+                    <div id="tree-overlay" class="tree-overlay"></div>
+                </div>
+                <div class="zoom-controls">
+                    <button id="zoom-in" class="zoom-btn">+</button>
+                    <button id="zoom-out" class="zoom-btn">-</button>
+                </div>
+            </div>
+
+            <div class="map-details-section">
+                <h2>Location Details</h2>
+                <div class="map-info">
+                    <div class="info-item">
+                        <h3>Current Location</h3>
+                        <p id="current-location">Potheri, Chennai</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>Visualization Options</h3>
+                        <select id="visualization-select" class="visualization-select">
+                            <option value="none">No Overlay</option>
+                            <option value="pollution">Pollution Level Impact</option>
+                            <option value="trees">Artificial Trees</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize the graph
+        const ctx = document.getElementById('pollutionGraph').getContext('2d');
+        const pollutionGraph = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['10,000 m²', '23,000 m²', '50,000 m²', '75,000 m²', '100,000 m²'],
+                datasets: [{
+                    label: 'Pollution Level',
+                    data: [65, 59, 80, 81, 56],
+                    borderColor: '#005048',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Pollution Level (0-100)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Area Coverage'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Store pollution data for each area
+        const areaData = {
+            '10000': 65,
+            '23000': 59,
+            '50000': 80,
+            '75000': 81,
+            '100000': 56
+        };
+
+        // Basic slider functionality
+        const sliders = document.querySelectorAll('.slider');
+        const areaSelect = document.getElementById('area-select');
+
+        sliders.forEach(slider => {
+            const valueDisplay = slider.nextElementSibling;
+            slider.addEventListener('input', () => {
+                valueDisplay.textContent = `${slider.value}${getUnit(slider.id)}`;
+                updateGraph();
+            });
+        });
+
+        areaSelect.addEventListener('change', () => {
+            const treeCount = parseInt(document.getElementById('artificial-trees').value);
+            const area = parseInt(areaSelect.value);
+            
+            // Update the area value display
+            const areaValue = document.querySelector('#area-select + .slider-value');
+            areaValue.textContent = `${parseInt(area).toLocaleString()} m²`;
+            
+            if (visualizationSelect.value === 'trees') {
+                updateTreeVisualization(treeCount, area);
+            }
+            updateImpactDetails(treeCount, area);
+            updateGraph();
+        });
+
+        function getUnit(sliderId) {
+            switch(sliderId) {
+                case 'temperature': return '°C';
+                case 'particulateMatter': return ' µg/m³';
+                case 'carbonMonoxide': return ' ppm';
+                case 'artificial-trees': return ' units';
+                default: return '';
+            }
+        }
+
+        function updateGraph() {
+            // Get current slider values
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const particulateMatter = parseFloat(document.getElementById('particulateMatter').value);
+            const carbonMonoxide = parseFloat(document.getElementById('carbonMonoxide').value);
+            const artificialTrees = parseFloat(document.getElementById('artificial-trees').value);
+            const selectedArea = areaSelect.value;
+
+            // Calculate pollution index using the new formula
+            const pollutionIndex = Math.min(100, Math.max(0,
+                (0.3 * temperature) + 
+                (0.4 * particulateMatter) + 
+                (1.2 * carbonMonoxide) - 
+                (0.8 * artificialTrees)
+            ));
+            
+            // Update the area data
+            areaData[selectedArea] = pollutionIndex;
+            
+            // Update the graph
+            pollutionGraph.data.datasets[0].data = Object.values(areaData);
+            pollutionGraph.update();
+        }
+
+        // Map zoom functionality
+        const delhiMap = document.getElementById('delhi-map');
+        const gridOverlay = document.getElementById('grid-overlay');
+        const mapContainer = document.querySelector('.map-container');
+        const zoomInBtn = document.getElementById('zoom-in');
+        const zoomOutBtn = document.getElementById('zoom-out');
+        
+        let zoomLevel = 1;
+        const minZoom = 1;  // Set minimum zoom to 1 (default view)
+        const maxZoom = 3;
+        const zoomStep = 0.2;
+        
+        function updateZoom() {
+            // Apply zoom to both map and grid
+            delhiMap.style.transform = `scale(${zoomLevel})`;
+            gridOverlay.style.transform = `scale(${zoomLevel})`;
+            
+            // Adjust grid size based on zoom level
+            const gridSize = 50 * zoomLevel;
+            gridOverlay.style.backgroundSize = `${gridSize}px ${gridSize}px`;
+            
+            // Adjust the size of the map container to enable scrolling when zoomed in
+            if (zoomLevel > 1) {
+                // Calculate the new dimensions based on zoom level
+                const newWidth = `${100 * zoomLevel}%`;
+                const newHeight = `${100 * zoomLevel}%`;
+                
+                // Apply the new dimensions
+                delhiMap.style.width = newWidth;
+                delhiMap.style.height = newHeight;
+                gridOverlay.style.width = newWidth;
+                gridOverlay.style.height = newHeight;
+            } else {
+                // Reset to original size when not zoomed
+                delhiMap.style.width = '100%';
+                delhiMap.style.height = '100%';
+                gridOverlay.style.width = '100%';
+                gridOverlay.style.height = '100%';
+            }
+            
+            // Update tree dots positions based on zoom level
+            const treeDots = document.querySelectorAll('.tree-dot');
+            treeDots.forEach(dot => {
+                const left = parseFloat(dot.style.left);
+                const top = parseFloat(dot.style.top);
+                dot.style.transform = `scale(${zoomLevel})`;
+                dot.style.left = `${left * zoomLevel}px`;
+                dot.style.top = `${top * zoomLevel}px`;
+            });
+        }
+        
+        // Add event listeners to zoom buttons
+        zoomInBtn.addEventListener('click', () => {
+            if (zoomLevel < maxZoom) {
+                zoomLevel += zoomStep;
+                updateZoom();
+            }
+        });
+        
+        zoomOutBtn.addEventListener('click', () => {
+            if (zoomLevel > minZoom) {
+                zoomLevel -= zoomStep;
+                updateZoom();
+            }
+        });
+        
+        // Initialize zoom
+        updateZoom();
+        
+        // Add scroll position indicators
+        mapContainer.addEventListener('scroll', () => {
+            const scrollX = mapContainer.scrollLeft;
+            const scrollY = mapContainer.scrollTop;
+            const maxScrollX = mapContainer.scrollWidth - mapContainer.clientWidth;
+            const maxScrollY = mapContainer.scrollHeight - mapContainer.clientHeight;
+            
+            // Update location details with scroll position
+            document.getElementById('current-location').textContent = 
+                `Map Position: ${Math.round(scrollX / maxScrollX * 100)}% horizontal, ${Math.round(scrollY / maxScrollY * 100)}% vertical`;
+        });
+        
+        // Visualization toggle functionality
+        const visualizationSelect = document.getElementById('visualization-select');
+        const pollutionOverlay = document.getElementById('pollution-overlay');
+        const treeOverlay = document.getElementById('tree-overlay');
+        
+        // Create tree dots
+        function createTreeDots() {
+            // Clear existing tree dots
+            treeOverlay.innerHTML = '';
+            
+            // Create 50 random tree dots
+            for (let i = 0; i < 50; i++) {
+                const treeDot = document.createElement('div');
+                treeDot.className = 'tree-dot';
+                
+                // Random position within the map
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                treeDot.style.left = `${left}%`;
+                treeDot.style.top = `${top}%`;
+                
+                treeOverlay.appendChild(treeDot);
+            }
+        }
+        
+        // Initialize tree dots
+        createTreeDots();
+        
+        // Connect graph simulation to map
+        function updatePollutionOverlay() {
+            // Get current slider values
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const particulateMatter = parseFloat(document.getElementById('particulateMatter').value);
+            const carbonMonoxide = parseFloat(document.getElementById('carbonMonoxide').value);
+            const artificialTrees = parseFloat(document.getElementById('artificial-trees').value);
+            
+            // Calculate pollution index using the new formula
+            const pollutionIndex = Math.min(100, Math.max(0,
+                (0.3 * temperature) + 
+                (0.4 * particulateMatter) + 
+                (1.2 * carbonMonoxide) - 
+                (0.8 * artificialTrees)
+            ));
+            
+            // Update pollution overlay opacity based on pollution index
+            const opacity = Math.min(0.8, pollutionIndex / 100);
+            pollutionOverlay.style.backgroundColor = `rgba(255, 0, 0, ${opacity})`;
+            
+            // Create pollution hotspots based on pollution index
+            createPollutionHotspots(temperature, particulateMatter, carbonMonoxide, artificialTrees);
+            
+            // Update tree visualization with real-world metrics
+            updateTreeVisualization(artificialTrees);
+            
+            // Update location details with impact information
+            updateImpactDetails(artificialTrees);
+        }
+        
+        function updateImpactDetails(treeCount, area) {
+            // Get current pollution parameters
+            const pm25 = parseFloat(document.getElementById('particulateMatter').value);
+            const co = parseFloat(document.getElementById('carbonMonoxide').value);
+            const temp = parseFloat(document.getElementById('temperature').value);
+            
+            // Calculate current pollution level
+            const currentPollution = Math.min(100, Math.max(0,
+                (0.3 * temp) + 
+                (0.4 * pm25) + 
+                (1.2 * co)
+            ));
+            
+            // Calculate recommended trees to overcome pollution
+            // Each tree reduces pollution by 0.8 units
+            const recommendedTrees = Math.ceil(currentPollution / 0.8);
+            
+            // Calculate projected pollution level with recommended trees
+            const projectedPollution = Math.max(0, currentPollution - (recommendedTrees * 0.8));
+            
+            // Update the location details section
+            const locationDetails = document.getElementById('current-location');
+            locationDetails.innerHTML = `
+                <div class="metric">
+                    <strong>Selected Area:</strong> ${parseInt(area).toLocaleString()} m²
+                </div>
+                <div class="metric">
+                    <strong>Current Pollution Level:</strong> ${currentPollution.toFixed(1)}/100
+                </div>
+                <div class="metric">
+                    <strong>Recommended BioUrban Trees:</strong> ${recommendedTrees} units
+                </div>
+            `;
+        }
+        
+        function updateTreeVisualization(treeCount) {
+            const treeOverlay = document.querySelector('.tree-overlay');
+            treeOverlay.innerHTML = '';
+            
+            // Calculate grid dimensions
+            const gridSize = 50; // Size of each grid cell
+            const mapWidth = document.querySelector('.map-container').offsetWidth;
+            const mapHeight = document.querySelector('.map-container').offsetHeight;
+            const gridCols = Math.floor(mapWidth / gridSize);
+            const gridRows = Math.floor(mapHeight / gridSize);
+            
+            // Create tree dots
+            for (let i = 0; i < treeCount; i++) {
+                const treeDot = document.createElement('div');
+                treeDot.className = 'tree-dot';
+                
+                // Calculate position based on grid
+                const gridX = Math.floor(Math.random() * gridCols);
+                const gridY = Math.floor(Math.random() * gridRows);
+                
+                // Position in the center of the grid cell
+                const x = gridX * gridSize + (gridSize / 2);
+                const y = gridY * gridSize + (gridSize / 2);
+                
+                treeDot.style.left = `${x}px`;
+                treeDot.style.top = `${y}px`;
+                treeOverlay.appendChild(treeDot);
+            }
+        }
+        
+        // Update the artificial trees slider label and range
+        document.getElementById('artificial-trees').max = 125; // Maximum 125 trees
+        document.querySelector('label[for="artificial-trees"]').textContent = 'BioUrban Trees (units)';
+        
+        // Add event listeners to sliders to update the map
+        document.getElementById('particulateMatter').addEventListener('input', () => {
+            const treeCount = parseInt(document.getElementById('artificial-trees').value);
+            const area = parseInt(areaSelect.value);
+            updateImpactDetails(treeCount, area);
+            if (visualizationSelect.value === 'pollution') {
+                updatePollutionOverlay();
+            }
+        });
+        
+        document.getElementById('carbonMonoxide').addEventListener('input', () => {
+            const treeCount = parseInt(document.getElementById('artificial-trees').value);
+            const area = parseInt(areaSelect.value);
+            updateImpactDetails(treeCount, area);
+            if (visualizationSelect.value === 'pollution') {
+                updatePollutionOverlay();
+            }
+        });
+        
+        document.getElementById('temperature').addEventListener('input', () => {
+            const treeCount = parseInt(document.getElementById('artificial-trees').value);
+            const area = parseInt(areaSelect.value);
+            updateImpactDetails(treeCount, area);
+            if (visualizationSelect.value === 'pollution') {
+                updatePollutionOverlay();
+            }
+        });
+        
+        document.getElementById('artificial-trees').addEventListener('input', () => {
+            const treeCount = parseInt(document.getElementById('artificial-trees').value);
+            const area = parseInt(areaSelect.value);
+            updateImpactDetails(treeCount, area);
+            if (visualizationSelect.value === 'trees') {
+                updateTreeVisualization(treeCount);
+            }
+            updatePollutionOverlay();
+        });
+        
+        // Handle visualization changes
+        visualizationSelect.addEventListener('change', () => {
+            const selectedValue = visualizationSelect.value;
+            
+            // Hide all overlays first
+            pollutionOverlay.classList.remove('active');
+            treeOverlay.classList.remove('active');
+            
+            // Show the selected overlay
+            if (selectedValue === 'pollution') {
+                pollutionOverlay.classList.add('active');
+                updatePollutionOverlay();
+            } else if (selectedValue === 'trees') {
+                treeOverlay.classList.add('active');
+                updateTreeVisualization(parseInt(document.getElementById('artificial-trees').value));
+            }
+        });
+        
+        // Initialize pollution overlay
+        updatePollutionOverlay();
+    </script>
+</body>
+</html>

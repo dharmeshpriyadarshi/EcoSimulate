@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Dashboard - EcoSimulate</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Theme styles */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f5f5f5;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #34495e;
+            --secondary-color: #2980b9;
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #2d2d2d;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dashboard-card {
+            background-color: var(--card-bg);
+            transition: background-color 0.3s;
+        }
+
+        /* Simulation styles */
+        .simulation-container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+        }
+
+        .simulation-controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .simulation-visualization {
+            width: 100%;
+            height: 300px;
+            background-color: #fff;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pollution-particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 0, 0, 0.5);
+        }
+
+        .simulation-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="navbar">
+            <img src="ecosimulatelogo.png" class="logo" alt="EcoSimulate Logo">
+            <ul>
+                <li class="regular-menu"><a href="home.html">Home</a></li>
+                <li class="regular-menu"><a href="getinsights.html">Get Insights</a></li>
+                <li class="regular-menu"><a href="simulator.html">Simulator</a></li>
+                <li class="regular-menu"><a href="knowmore.html">Know More</a></li>
+                <li class="researcher-menu">
+                    <a href="research-dashboard.html">Research Dashboard</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">You</a>
+                    <div class="dropdown-content">
+                        <div class="user-info">
+                            <p>Email: dp1801@srmist.edu.in</p>
+                            <p>Name: Dharmesh Priyadarshi</p>
+                            <p id="researchId-display"></p>
+                        </div>
+                        <a href="index.html" class="logout-btn">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Research Dashboard Content -->
+    <div class="research-dashboard">
+        <!-- <h1>Research Dashboard</h1> -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card" data-position="left">
+                <h2>Data Analysis</h2>
+                <p>Access advanced analytics and data visualization tools for pollution research.</p>
+                <button class="dashboard-btn" data-popup="data-analysis">View Analytics</button>
+            </div>
+            <div class="dashboard-card" data-position="center-left">
+                <h2>Research Reports</h2>
+                <p>Generate and manage detailed research reports and findings.</p>
+                <button class="dashboard-btn" data-popup="research-reports">View Reports</button>
+            </div>
+            <div class="dashboard-card" data-position="center-right">
+                <h2>Advanced Simulations</h2>
+                <p>Run complex environmental simulations with custom parameters.</p>
+                <button class="dashboard-btn" data-popup="advanced-simulations">Run Simulations</button>
+            </div>
+            <div class="dashboard-card" data-position="right">
+                <h2>Settings</h2>
+                <p>Configure your research preferences and dashboard settings.</p>
+                <button class="dashboard-btn" data-popup="settings">Configure</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay"></div>
+
+    <!-- Popup Cards -->
+    <div class="popup-card" id="data-analysis-popup">
+        <div class="popup-content">
+            <h2>Data Analysis</h2>
+            <div class="popup-body">
+                <div class="analysis-section">
+                    <h3>Real-time Data Analysis</h3>
+                    <p>Monitor and analyze pollution data in real-time with advanced visualization tools. Our system provides:</p>
+                    <ul>
+                        <li>Real-time AQI monitoring</li>
+                        <li>Historical data trends</li>
+                        <li>Pollutant correlation analysis</li>
+                        <li>Geographic distribution patterns</li>
+                    </ul>
+                    <div class="analysis-metrics">
+                        <div class="metric">
+                            <span class="metric-value">85%</span>
+                            <span class="metric-label">Data Accuracy</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">24/7</span>
+                            <span class="metric-label">Real-time Updates</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="analysis-tools">
+                    <h3>Available Tools</h3>
+                    <ul>
+                        <li>Trend Analysis - Track pollution patterns over time</li>
+                        <li>Correlation Studies - Identify relationships between pollutants</li>
+                        <li>Pattern Recognition - Detect recurring pollution patterns</li>
+                        <li>Predictive Modeling - Forecast future pollution levels</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="close-popup">×</button>
+        </div>
+    </div>
+
+    <div class="popup-card" id="research-reports-popup">
+        <div class="popup-content">
+            <h2>Research Reports</h2>
+            <div class="popup-body">
+                <div class="reports-section">
+                    <h3>Generate Reports</h3>
+                    <p>Create detailed research reports with customizable templates and data visualization. Choose from various report types:</p>
+                    <div class="report-types">
+                        <div class="report-type">
+                            <h4>Daily Reports</h4>
+                            <ul>
+                                <li>Hourly pollution levels</li>
+                                <li>Peak pollution times</li>
+                                <li>Major pollutant sources</li>
+                                <li>Impact assessment</li>
+                            </ul>
+                        </div>
+                        <div class="report-type">
+                            <h4>Weekly Analysis</h4>
+                            <ul>
+                                <li>Weekly trends and patterns</li>
+                                <li>Comparative analysis</li>
+                                <li>Source contribution</li>
+                                <li>Mitigation effectiveness</li>
+                            </ul>
+                        </div>
+                        <div class="report-type">
+                            <h4>Monthly Research</h4>
+                            <ul>
+                                <li>Long-term trends</li>
+                                <li>Seasonal variations</li>
+                                <li>Policy impact analysis</li>
+                                <li>Recommendations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="close-popup">×</button>
+        </div>
+    </div>
+
+    <div class="popup-card" id="advanced-simulations-popup">
+        <div class="popup-content">
+            <h2>Advanced Simulations</h2>
+            <div class="popup-body">
+                <div class="simulation-section">
+                    <h3>Run Environmental Simulations</h3>
+                    <p>Configure and run complex environmental simulations with custom parameters. Available simulation types:</p>
+                    <div class="simulation-options">
+                        <div class="option">
+                            <h4>Pollution Spread</h4>
+                            <ul>
+                                <li>Wind pattern analysis</li>
+                                <li>Pollutant dispersion</li>
+                                <li>Impact radius calculation</li>
+                                <li>Time-based spread</li>
+                            </ul>
+                        </div>
+                        <div class="option">
+                            <h4>Mitigation Impact</h4>
+                            <ul>
+                                <li>Tree planting effectiveness</li>
+                                <li>Traffic management impact</li>
+                                <li>Industrial regulation effects</li>
+                                <li>Policy implementation results</li>
+                            </ul>
+                        </div>
+                        <div class="option">
+                            <h4>Future Projections</h4>
+                            <ul>
+                                <li>Population growth impact</li>
+                                <li>Urban development effects</li>
+                                <li>Climate change scenarios</li>
+                                <li>Long-term predictions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="close-popup">×</button>
+        </div>
+    </div>
+
+    <div class="popup-card" id="settings-popup">
+        <div class="popup-content">
+            <h2>Settings</h2>
+            <div class="popup-body">
+                <div class="settings-section">
+                    <h3>Dashboard Configuration</h3>
+                    <div class="setting-options">
+                        <div class="setting">
+                            <label>Data Refresh Rate</label>
+                            <select>
+                                <option>5 minutes</option>
+                                <option>15 minutes</option>
+                                <option>30 minutes</option>
+                                <option>1 hour</option>
+                            </select>
+                        </div>
+                        <div class="setting">
+                            <label>Default View</label>
+                            <select>
+                                <option>Overview</option>
+                                <option>Detailed</option>
+                                <option>Custom</option>
+                            </select>
+                        </div>
+                        <div class="setting">
+                            <label>Notifications</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="notifications" checked>
+                                <label for="notifications"></label>
+                            </div>
+                        </div>
+                        <div class="setting">
+                            <label>Data Export Format</label>
+                            <select>
+                                <option>CSV</option>
+                                <option>JSON</option>
+                                <option>PDF</option>
+                                <option>Excel</option>
+                            </select>
+                        </div>
+                        <div class="setting">
+                            <label>Theme</label>
+                            <select>
+                                <option>Light</option>
+                                <option>Dark</option>
+                                <option>System</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="close-popup">×</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switching functionality
+            const themeSelect = document.querySelector('select[aria-label="Theme"]');
+            if (themeSelect) {
+                themeSelect.addEventListener('change', function() {
+                    const theme = this.value.toLowerCase();
+                    document.documentElement.setAttribute('data-theme', theme);
+                    localStorage.setItem('theme', theme);
+                });
+
+                // Load saved theme
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                themeSelect.value = savedTheme;
+            }
+
+            // Simulation functionality
+            const simulationContainer = document.querySelector('#advanced-simulations-popup .popup-body');
+            if (simulationContainer) {
+                const simulationHTML = `
+                    <div class="simulation-container">
+                        <h3>Pollution Spread Simulation</h3>
+                        <div class="simulation-controls">
+                            <button id="start-simulation" class="dashboard-btn">Start Simulation</button>
+                            <button id="pause-simulation" class="dashboard-btn" disabled>Pause</button>
+                            <button id="reset-simulation" class="dashboard-btn">Reset</button>
+                        </div>
+                        <div class="simulation-visualization" id="simulation-visualization"></div>
+                        <div class="simulation-metrics">
+                            <div class="metric-card">
+                                <h4>Current AQI</h4>
+                                <p id="current-aqi">0</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Pollution Spread</h4>
+                                <p id="pollution-spread">0%</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Wind Speed</h4>
+                                <p id="wind-speed">0 km/h</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                simulationContainer.insertAdjacentHTML('beforeend', simulationHTML);
+
+                // Simulation logic
+                let simulationInterval;
+                let particles = [];
+                let isSimulationRunning = false;
+
+                const startSimulation = () => {
+                    if (isSimulationRunning) return;
+                    isSimulationRunning = true;
+                    document.getElementById('start-simulation').disabled = true;
+                    document.getElementById('pause-simulation').disabled = false;
+
+                    simulationInterval = setInterval(() => {
+                        updateSimulation();
+                    }, 100);
+                };
+
+                const pauseSimulation = () => {
+                    isSimulationRunning = false;
+                    clearInterval(simulationInterval);
+                    document.getElementById('start-simulation').disabled = false;
+                    document.getElementById('pause-simulation').disabled = true;
+                };
+
+                const resetSimulation = () => {
+                    pauseSimulation();
+                    particles = [];
+                    document.getElementById('simulation-visualization').innerHTML = '';
+                    updateMetrics(0, 0, 0);
+                };
+
+                const updateSimulation = () => {
+                    const visualization = document.getElementById('simulation-visualization');
+                    const width = visualization.clientWidth;
+                    const height = visualization.clientHeight;
+
+                    // Add new particles
+                    if (Math.random() < 0.3) {
+                        const particle = document.createElement('div');
+                        particle.className = 'pollution-particle';
+                        particle.style.left = '50%';
+                        particle.style.top = '50%';
+                        particle.style.transform = `translate(-50%, -50%)`;
+                        visualization.appendChild(particle);
+                        particles.push({
+                            element: particle,
+                            x: width / 2,
+                            y: height / 2,
+                            vx: (Math.random() - 0.5) * 2,
+                            vy: (Math.random() - 0.5) * 2
+                        });
+                    }
+
+                    // Update existing particles
+                    particles.forEach(particle => {
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+                        particle.element.style.left = `${particle.x}px`;
+                        particle.element.style.top = `${particle.y}px`;
+
+                        // Remove particles that go out of bounds
+                        if (particle.x < 0 || particle.x > width || particle.y < 0 || particle.y > height) {
+                            particle.element.remove();
+                            particles = particles.filter(p => p !== particle);
+                        }
+                    });
+
+                    // Update metrics
+                    const aqi = Math.min(500, Math.floor(particles.length * 5));
+                    const spread = Math.min(100, Math.floor((particles.length / 50) * 100));
+                    const windSpeed = Math.floor(Math.random() * 20) + 5;
+                    updateMetrics(aqi, spread, windSpeed);
+                };
+
+                const updateMetrics = (aqi, spread, windSpeed) => {
+                    document.getElementById('current-aqi').textContent = aqi;
+                    document.getElementById('pollution-spread').textContent = `${spread}%`;
+                    document.getElementById('wind-speed').textContent = `${windSpeed} km/h`;
+                };
+
+                // Add event listeners
+                document.getElementById('start-simulation').addEventListener('click', startSimulation);
+                document.getElementById('pause-simulation').addEventListener('click', pauseSimulation);
+                document.getElementById('reset-simulation').addEventListener('click', resetSimulation);
+            }
+
+            // Existing popup functionality
+            const buttons = document.querySelectorAll('.dashboard-btn');
+            const popupOverlay = document.querySelector('.popup-overlay');
+            const closeButtons = document.querySelectorAll('.close-popup');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const popupId = this.getAttribute('data-popup') + '-popup';
+                    const popup = document.getElementById(popupId);
+                    
+                    popupOverlay.style.display = 'block';
+                    popup.style.visibility = 'visible';
+                    popup.style.opacity = '1';
+                    document.body.classList.add('popup-open');
+                });
+            });
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const popup = this.closest('.popup-card');
+                    const overlay = document.querySelector('.popup-overlay');
+                    
+                    popup.style.visibility = 'hidden';
+                    popup.style.opacity = '0';
+                    overlay.style.display = 'none';
+                    document.body.classList.remove('popup-open');
+                });
+            });
+
+            popupOverlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    const popups = document.querySelectorAll('.popup-card');
+                    popups.forEach(popup => {
+                        if (popup.style.visibility === 'visible') {
+                            const closeBtn = popup.querySelector('.close-popup');
+                            closeBtn.click();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

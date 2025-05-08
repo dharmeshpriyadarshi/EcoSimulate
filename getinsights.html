@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pollution Mitigation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="navbar">
+            <img src="ecosimulatelogo.png" class="logo" alt="EcoSimulate Logo">
+            <ul>
+                <li class="regular-menu"><a href="home.html">Home</a></li>
+                <li class="regular-menu"><a href="getinsights.html">Get Insights</a></li>
+                <li class="regular-menu"><a href="simulator.html">Simulator</a></li>
+                <li class="regular-menu"><a href="knowmore.html">Know More</a></li>
+                <li class="researcher-menu" style="display: none;">
+                    <a href="research-dashboard.html">Research Dashboard</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">You</a>
+                    <div class="dropdown-content">
+                        <div class="user-info">
+                            <p>Email: dp1801@srmist.edu.in</p>
+                            <p>Name: Dharmesh Priyadarshi</p>
+                            <p id="researchId-display"></p>
+                        </div>
+                        <a href="index.html" class="logout-btn">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <div class="main-content">
+        <div class="pollution-dashboard">
+            <div class="pollution-container">
+                <div class="dashboard-header">
+                    <h2>Live Air Pollution Dashboard</h2>
+                    <div class="dashboard-controls">
+                        <div class="location-select-wrapper">
+                            <select id="location-select" class="location-select">
+                                <option value="delhi">Delhi</option>
+                                <option value="mumbai">Mumbai</option>
+                                <option value="chennai">Chennai</option>
+                                <option value="bangalore">Bangalore</option>
+                                <option value="kolkata">Kolkata</option>
+                            </select>
+                        </div>
+                        <button type="button" class="refresh-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+                                <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                            </svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                <div id="pollution-data">Loading pollution data...</div>
+                <div class="additional-info">
+                    <div class="aqi-scale">
+                        <h3>AQI Scale</h3>
+                        <div class="scale-item good">0-50: Good</div>
+                        <div class="scale-item moderate">51-100: Moderate</div>
+                        <div class="scale-item unhealthy">101-150: Unhealthy for Sensitive Groups</div>
+                        <div class="scale-item very-unhealthy">151-200: Very Unhealthy</div>
+                        <div class="scale-item hazardous">201+: Hazardous</div>
+                    </div>
+                    <div class="last-updated">
+                        Last Updated: <span id="update-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Function to get city data with proper AQI ranges
+        function getCityData(city) {
+            // Convert city name to match the exact case used in the switch
+            const normalizedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+            
+            switch(normalizedCity) {
+                case 'Delhi':
+                    return {
+                        aqi: 183,
+                        description: 'Very Unhealthy',
+                        color: '#8B0000'
+                    };
+                case 'Chennai':
+                    return {
+                        aqi: 76,
+                        description: 'Moderate',
+                        color: '#FFA500'
+                    };
+                case 'Mumbai':
+                    return {
+                        aqi: 97,
+                        description: 'Unhealthy for Sensitive Groups',
+                        color: '#FF4500'
+                    };
+                case 'Kolkata':
+                    return {
+                        aqi: 115,
+                        description: 'Unhealthy',
+                        color: '#FF0000'
+                    };
+                case 'Bengaluru':
+                    return {
+                        aqi: 65,
+                        description: 'Moderate',
+                        color: '#FFA500'
+                    };
+                default:
+                    return {
+                        aqi: 180,
+                        description: 'Very Unhealthy',
+                        color: '#8B0000'
+                    };
+            }
+        }
+
+        // Function to update pollution data display
+        function updatePollutionData(city) {
+            const data = getCityData(city);
+            const pollutionData = document.getElementById('pollution-data');
+            const updateTime = document.getElementById('update-time');
+            
+            // Debug log to check the values
+            console.log('City:', city, 'AQI:', data.aqi);
+            
+            pollutionData.innerHTML = `
+                <div class="aqi-display" style="background-color: ${data.color}">
+                    <div class="aqi-value">${data.aqi}</div>
+                    <div class="aqi-description">${data.description}</div>
+                </div>
+                <div class="pollution-details">
+                    <div class="detail-item">
+                        <span class="detail-label">PM2.5:</span>
+                        <span class="detail-value">${Math.round(data.aqi * 0.8)} µg/m³</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">PM10:</span>
+                        <span class="detail-value">${Math.round(data.aqi * 1.2)} µg/m³</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">CO:</span>
+                        <span class="detail-value">${Math.round(data.aqi * 0.1)} ppm</span>
+                    </div>
+                </div>
+            `;
+            
+            // Update timestamp
+            const now = new Date();
+            updateTime.textContent = now.toLocaleTimeString();
+        }
+
+        // Initialize with Delhi data when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePollutionData('Delhi');
+        });
+
+        // Add event listener for location select
+        document.getElementById('location-select').addEventListener('change', function() {
+            const selectedCity = this.value;
+            if (selectedCity === 'bangalore') {
+                updatePollutionData('Bengaluru');
+            } else {
+                updatePollutionData(selectedCity);
+            }
+        });
+
+        // Add event listener for refresh button
+        document.querySelector('.refresh-btn').addEventListener('click', function() {
+            const selectedCity = document.getElementById('location-select').value;
+            if (selectedCity === 'bangalore') {
+                updatePollutionData('Bengaluru');
+            } else {
+                updatePollutionData(selectedCity);
+            }
+        });
+    </script>
+</body>
+</html>

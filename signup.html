@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - EcoSimulate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Sign-Up Section -->
+    <div class="signup-banner">
+        <div class="signup-content">
+            <h1>Create Your Account</h1>
+            <p>Join EcoSimulate to explore real-time pollution data and simulations.</p>
+            <form class="signup-form" onsubmit="return handleSignUp(event)">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="index.html">Sign In</a></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
